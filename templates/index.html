@@ -28,15 +28,19 @@
             <svg viewBox="0 0 100 100">
               <circle r="45" cx="50" cy="50"></circle>
             </svg>
-            <span class="countdown-number" id="countdownDisplay">--</span>
+            <!-- Utilisation d'une classe commune pour le compteur -->
+            <span class="countdownDisplay countdown-number">--</span>
           </div>
         </div>
-        <div id="countdownFinished" style="display: none">Temps écoulé !</div>
+        <div class="countdownFinished" style="display: none">
+          Temps écoulé !
+        </div>
       </div>
       <div class="game-card mt-2">
         <div class="dice-container text-center">
-          <div class="dice" id="diceValue">-</div>
-          <p id="diceLabel" class="small-title">Dé</p>
+          <!-- Utilisation d'une classe commune pour le dé -->
+          <div class="diceValue dice">-</div>
+          <p class="diceLabel small-title">Dé</p>
         </div>
       </div>
     </div>
@@ -44,18 +48,23 @@
     <div class="col-lg-6 col-md-8 d-flex flex-column order-2 order-lg-2">
       <div class="game-card order-1">
         <h3 class="small-title">📝 Quiz</h3>
-        <div id="quizQuestionContainer">
-          <div class="quiz-question" id="quizQuestionDisplay">
+        <div class="quizQuestionContainer" id="quizQuestionContainer">
+          <div class="quizQuestionDisplay quiz-question">
             En attente de la question...
           </div>
         </div>
-        <div id="quizAnswerContainer" style="display: none">
-          <div class="quiz-answer" id="quizAnswerDisplay"></div>
+        <div
+          class="quizAnswerContainer"
+          id="quizAnswerContainer"
+          style="display: none"
+        >
+          <div class="quizAnswerDisplay quiz-answer"></div>
         </div>
       </div>
       <div class="game-card mt-2 order-4">
         <h3 class="small-title text-center">💬 Chat</h3>
         <div
+          class="chatMessages"
           id="chatMessages"
           style="
             height: 150px;
@@ -66,12 +75,11 @@
             font-size: 0.9em;
           "
         ></div>
-        <form id="chatForm">
+        <form class="chatForm" id="chatForm">
           <div class="input-group">
             <input
               type="text"
-              id="chatInput"
-              class="form-control form-control-sm"
+              class="chatInput form-control form-control-sm"
               placeholder="Votre message"
             />
             <button type="submit" class="btn btn-primary btn-sm">
@@ -85,18 +93,21 @@
     <div class="col-lg-3 col-md-12 d-flex flex-column order-3 order-lg-3">
       <div class="game-card order-1">
         <h3 class="small-title text-center">🏆 Scores</h3>
-        <div id="scoresContainer" class="d-flex justify-content-around">
+        <div
+          class="scoresContainer d-flex justify-content-around"
+          id="scoresContainer"
+        >
           <div class="score-box team1">
-            <span class="score-value" id="scoreTeam1">0</span>
+            <span class="scoreValue score-value" id="scoreTeam1">0</span>
           </div>
           <div class="score-box team2">
-            <span class="score-value" id="scoreTeam2">0</span>
+            <span class="scoreValue score-value" id="scoreTeam2">0</span>
           </div>
         </div>
       </div>
       <div class="game-card mt-2 order-2">
         <h3 class="small-title text-center">🧑‍🤝‍🧑 Joueurs</h3>
-        <div id="playersList">
+        <div class="playersList" id="playersList">
           <!-- Liste dynamique -->
         </div>
       </div>
@@ -123,34 +134,41 @@
               <svg viewBox="0 0 100 100">
                 <circle r="45" cx="50" cy="50"></circle>
               </svg>
-              <span class="countdown-number" id="countdownDisplay">--</span>
+              <span class="countdownDisplay countdown-number">--</span>
             </div>
           </div>
-          <div id="countdownFinished" style="display: none">Temps écoulé !</div>
+          <div class="countdownFinished" style="display: none">
+            Temps écoulé !
+          </div>
         </div>
       </div>
       <div class="col-6">
         <div class="game-card mobile-dice text-center">
           <h4>Dé</h4>
-          <div class="dice" id="diceValue">-</div>
+          <div class="diceValue dice">-</div>
         </div>
       </div>
     </div>
     <div class="game-card mobile-quiz mt-2">
       <h4>📝 Quiz</h4>
-      <div id="quizQuestionContainer">
-        <div class="quiz-question" id="quizQuestionDisplay">
+      <div class="quizQuestionContainer" id="quizQuestionContainerMobile">
+        <div class="quizQuestionDisplay quiz-question">
           En attente de la question...
         </div>
       </div>
-      <div id="quizAnswerContainer" style="display: none">
-        <div class="quiz-answer" id="quizAnswerDisplay"></div>
+      <div
+        class="quizAnswerContainer"
+        id="quizAnswerContainerMobile"
+        style="display: none"
+      >
+        <div class="quizAnswerDisplay quiz-answer"></div>
       </div>
     </div>
     <div class="game-card mobile-chat mt-2">
       <h4>💬 Chat</h4>
       <div
-        id="chatMessages"
+        class="chatMessages"
+        id="chatMessagesMobile"
         style="
           height: 150px;
           overflow-y: auto;
@@ -160,12 +178,11 @@
           font-size: 0.9em;
         "
       ></div>
-      <form id="chatForm">
+      <form class="chatForm" id="chatFormMobile">
         <div class="input-group">
           <input
             type="text"
-            id="chatInput"
-            class="form-control form-control-sm"
+            class="chatInput form-control form-control-sm"
             placeholder="Votre message"
           />
           <button type="submit" class="btn btn-primary btn-sm">Envoyer</button>
