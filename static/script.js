@@ -26,7 +26,7 @@ $(function () {
 
   socket.on("countdown_started", function (data) {
     console.log("⏳ Compte à rebours démarré pour " + data.seconds + "s");
-    $("#countdownFinished").hide();
+    $(".countdownFinished").hide();
     animateCountdownStart(data.seconds);
   });
 
@@ -66,19 +66,20 @@ $(function () {
   });
 
   socket.on("chat_history", function (data) {
-    $("#chatMessages").empty();
+    $(".chatMessages").empty();
     data.forEach(function (msg) {
       appendChatMessage(msg);
     });
   });
 
-  $("#chatForm").submit(function (e) {
+  // Ciblage des formulaires de chat via leur classe commune
+  $(".chatForm").submit(function (e) {
     e.preventDefault();
-    var message = $("#chatInput").val().trim();
+    var message = $(this).find(".chatInput").val().trim();
     var username = window.username || "Anonyme";
     if (message !== "") {
       socket.emit("chat_message", { user: username, message: message });
-      $("#chatInput").val("");
+      $(this).find(".chatInput").val("");
     }
   });
 
@@ -146,10 +147,10 @@ $(function () {
         "player-card animate__animated animate__fadeIn"
       );
       playerCard.html(`
-          <div class="player-avatar">${initials}</div>
-          <div class="player-name">${player.username}</div>
-          <span class="team-badge ${teamClass}">${teamLabel}</span>
-        `);
+        <div class="player-avatar">${initials}</div>
+        <div class="player-name">${player.username}</div>
+        <span class="team-badge ${teamClass}">${teamLabel}</span>
+      `);
       playersList.append(playerCard);
     });
   }
@@ -167,7 +168,7 @@ $(function () {
   }
 
   function animateCountdownStart(seconds) {
-    $("#countdownDisplay").text(seconds);
+    $(".countdownDisplay").text(seconds);
     var circumference = 283;
     $(".countdown-circle circle").css({
       "stroke-dasharray": circumference,
@@ -185,49 +186,49 @@ $(function () {
 
   function updateCountdown(seconds) {
     if (seconds < 0) return;
-    $("#countdownDisplay").text(seconds);
+    $(".countdownDisplay").text(seconds);
     var circumference = 283;
     var percentage = seconds / 30;
     var offset = circumference - percentage * circumference;
     $(".countdown-circle circle").css("stroke-dashoffset", offset);
     if (seconds <= 5) {
       $(".countdown-circle circle").css("stroke", "#f44336");
-      $("#countdownDisplay").addClass("animate__animated animate__heartBeat");
+      $(".countdownDisplay").addClass("animate__animated animate__heartBeat");
       playSound("tick");
     } else if (seconds <= 10) {
       $(".countdown-circle circle").css("stroke", "#ff9800");
-      $("#countdownDisplay").removeClass(
+      $(".countdownDisplay").removeClass(
         "animate__animated animate__heartBeat"
       );
     }
   }
 
   function resetCountdown() {
-    $("#countdownDisplay").text("--");
-    $("#countdownFinished").hide();
+    $(".countdownDisplay").text("--");
+    $(".countdownFinished").hide();
     $(".countdown-circle circle").css({
       stroke: "#ff9800",
       "stroke-dashoffset": "0",
     });
-    $("#countdownDisplay").removeClass("animate__animated animate__heartBeat");
+    $(".countdownDisplay").removeClass("animate__animated animate__heartBeat");
   }
 
   function finishCountdown() {
-    $("#countdownDisplay").text("0");
-    $("#countdownFinished").show();
+    $(".countdownDisplay").text("0");
+    $(".countdownFinished").show();
     $(".countdown-circle circle").css({
       stroke: "#f44336",
       "stroke-dashoffset": "283",
     });
-    $("#countdownFinished").addClass("animate__animated animate__flash");
+    $(".countdownFinished").addClass("animate__animated animate__flash");
     setTimeout(function () {
-      $("#countdownFinished").removeClass("animate__animated animate__flash");
+      $(".countdownFinished").removeClass("animate__animated animate__flash");
     }, 2000);
   }
 
   function animateNewQuestion(question) {
-    const questionElement = $("#quizQuestionDisplay");
-    $("#quizAnswerContainer").hide();
+    const questionElement = $(".quizQuestionDisplay");
+    $(".quizAnswerContainer").hide();
     questionElement.addClass("animate__animated animate__fadeOut");
     setTimeout(function () {
       questionElement.text(question);
@@ -241,32 +242,32 @@ $(function () {
   }
 
   function revealAnswer(answer) {
-    $("#quizAnswerDisplay").text(answer);
-    $("#quizAnswerContainer").hide().fadeIn(800);
-    $("#quizAnswerDisplay").addClass("animate__animated animate__bounceIn");
+    $(".quizAnswerDisplay").text(answer);
+    $(".quizAnswerContainer").hide().fadeIn(800);
+    $(".quizAnswerDisplay").addClass("animate__animated animate__bounceIn");
     setTimeout(function () {
-      $("#quizAnswerDisplay").removeClass(
+      $(".quizAnswerDisplay").removeClass(
         "animate__animated animate__bounceIn"
       );
     }, 1000);
   }
 
   function animateDiceRoll(value) {
-    const diceElement = $("#diceValue");
-    diceElement.addClass("roll-animation");
+    const diceElements = $(".diceValue");
+    diceElements.addClass("roll-animation");
     let rollCount = 0;
     const maxRolls = 10;
     const rollInterval = setInterval(function () {
       if (rollCount < maxRolls) {
-        diceElement.text(Math.floor(Math.random() * 6) + 1);
+        diceElements.text(Math.floor(Math.random() * 6) + 1);
         rollCount++;
       } else {
         clearInterval(rollInterval);
-        diceElement.removeClass("roll-animation");
-        diceElement.addClass("animate__animated animate__bounceIn");
-        diceElement.text(value);
+        diceElements.removeClass("roll-animation");
+        diceElements.addClass("animate__animated animate__bounceIn");
+        diceElements.text(value);
         setTimeout(function () {
-          diceElement.removeClass("animate__animated animate__bounceIn");
+          diceElements.removeClass("animate__animated animate__bounceIn");
         }, 1000);
       }
     }, 100);
@@ -293,19 +294,19 @@ $(function () {
   }
 
   function showToast(message) {
-    if ($("#toast-container").length === 0) {
+    if ($(".toast-container").length === 0) {
       $("body").append(`
-          <div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;"></div>
-        `);
+        <div class="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;"></div>
+      `);
     }
     const toastId = "toast-" + Date.now();
     const toast = $(`
-        <div id="${toastId}" class="animate__animated animate__fadeInUp" 
-             style="background: #333; color: white; padding: 10px 20px; border-radius: 5px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">
-          ${message}
-        </div>
-      `);
-    $("#toast-container").append(toast);
+      <div id="${toastId}" class="animate__animated animate__fadeInUp" 
+           style="background: #333; color: white; padding: 10px 20px; border-radius: 5px; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">
+        ${message}
+      </div>
+    `);
+    $(".toast-container").append(toast);
     setTimeout(function () {
       toast.removeClass("animate__fadeInUp").addClass("animate__fadeOutDown");
       setTimeout(function () {
@@ -315,12 +316,14 @@ $(function () {
   }
 
   function appendChatMessage(msg) {
-    var chatMessages = $("#chatMessages");
-    var newMessage = $("<div>").text(msg.user + ": " + msg.message);
-    if (msg.correct) {
-      newMessage.css("color", "green");
-    }
-    chatMessages.append(newMessage);
-    chatMessages.scrollTop(chatMessages[0].scrollHeight);
+    var chatContainers = $(".chatMessages");
+    chatContainers.each(function () {
+      var newMessage = $("<div>").text(msg.user + ": " + msg.message);
+      if (msg.correct) {
+        newMessage.css("color", "green");
+      }
+      $(this).append(newMessage);
+      $(this).scrollTop($(this)[0].scrollHeight);
+    });
   }
 });
