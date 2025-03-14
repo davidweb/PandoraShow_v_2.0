@@ -27,7 +27,7 @@ session.get('is_admin') %}
   </div>
 </div>
 {% else %}
-<!-- Tableau de Bord -->
+<!-- Tableau de Bord Administrateur -->
 <div class="row">
   <div class="col-12">
     <div class="game-card text-center">
@@ -107,7 +107,7 @@ session.get('is_admin') %}
     </div>
   </div>
 
-  <!-- 🔹 Lanceur du Chronomètre -->
+  <!-- 🔹 Contrôle du Chronomètre & Réinitialisation -->
   <div class="col-lg-4 col-md-6">
     <div class="game-card">
       <h4>⏳ Contrôle du Chronomètre</h4>
@@ -129,8 +129,6 @@ session.get('is_admin') %}
         </button>
       </form>
     </div>
-
-    <!-- 🔹 Réinitialiser le jeu (placé en bas du Chronomètre) -->
     <div class="game-card mt-3">
       <h4>🔄 Réinitialiser</h4>
       <form action="{{ url_for('reset_game') }}" method="POST">
@@ -162,8 +160,10 @@ session.get('is_admin') %}
   <div class="col-lg-4 col-md-12">
     <div class="game-card">
       <h4>💬 Chat en Direct</h4>
+      <!-- Ajout de la classe "chatMessages" -->
       <div
         id="chatMessages"
+        class="chatMessages"
         style="
           height: 150px;
           overflow-y: auto;
@@ -173,12 +173,13 @@ session.get('is_admin') %}
           font-size: 0.9em;
         "
       ></div>
-      <form id="chatForm">
+      <!-- Ajout de la classe "chatForm" et "chatInput" -->
+      <form id="chatForm" class="chatForm">
         <div class="input-group">
           <input
             type="text"
             id="chatInput"
-            class="form-control form-control-sm"
+            class="chatInput form-control form-control-sm"
             placeholder="Envoyer un message..."
           />
           <button type="submit" class="btn btn-primary btn-sm">Envoyer</button>
