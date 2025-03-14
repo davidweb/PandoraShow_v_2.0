@@ -1,0 +1,190 @@
+{% extends "layout.html" %} {% block content %} {% if not
+session.get('is_admin') %}
+<!-- Accès Admin -->
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="game-card">
+      <h2 class="text-center">🔑 Connexion Administrateur</h2>
+      {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+      {% endif %}
+      <form method="POST">
+        <div class="mb-3">
+          <label for="password" class="form-label">Mot de passe :</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary w-100 btn-sm">
+          Accéder au panneau
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% else %}
+<!-- Tableau de Bord -->
+<div class="row">
+  <div class="col-12">
+    <div class="game-card text-center">
+      <h2>📊 Tableau de Bord Administrateur</h2>
+      <p class="lead">
+        Contrôlez les sessions en direct et ajustez les paramètres du jeu.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Grille du Moniteur Admin -->
+<div class="row mt-4">
+  <!-- 🔹 Gestion des équipes -->
+  <div class="col-lg-4 col-md-6">
+    <div class="game-card">
+      <h4>👥 Gestion des Équipes</h4>
+      <form action="{{ url_for('route_auto_teams') }}" method="POST">
+        <button type="submit" class="btn btn-warning btn-sm w-100">
+          <i class="bi bi-people-fill"></i> Former les équipes aléatoirement
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 🔹 Gestion des Scores -->
+  <div class="col-lg-4 col-md-6">
+    <div class="game-card">
+      <h4>🏆 Scores</h4>
+      <form action="{{ url_for('update_score') }}" method="POST">
+        <div class="input-group">
+          <select name="team" class="form-select form-select-sm">
+            <option value="1">Équipe 1</option>
+            <option value="2">Équipe 2</option>
+          </select>
+          <input
+            type="number"
+            name="points"
+            class="form-control form-control-sm"
+            value="1"
+          />
+          <button type="submit" class="btn btn-success btn-sm">+</button>
+        </div>
+      </form>
+      <form action="{{ url_for('update_score') }}" method="POST" class="mt-2">
+        <div class="input-group">
+          <select name="team" class="form-select form-select-sm">
+            <option value="1">Équipe 1</option>
+            <option value="2">Équipe 2</option>
+          </select>
+          <input
+            type="number"
+            name="points"
+            class="form-control form-control-sm"
+            value="-1"
+          />
+          <button type="submit" class="btn btn-danger btn-sm">-</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 🔹 Gestion du Quiz -->
+  <div class="col-lg-4 col-md-6">
+    <div class="game-card">
+      <h4>📚 Gestion du Quiz</h4>
+      <form action="{{ url_for('next_question') }}" method="POST">
+        <button type="submit" class="btn btn-warning btn-sm w-100">
+          <i class="bi bi-arrow-right-circle"></i> Question suivante
+        </button>
+      </form>
+      <form action="{{ url_for('reveal_answer') }}" method="POST" class="mt-2">
+        <button type="submit" class="btn btn-primary btn-sm w-100">
+          <i class="bi bi-eye-fill"></i> Révéler la réponse
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 🔹 Lanceur du Chronomètre -->
+  <div class="col-lg-4 col-md-6">
+    <div class="game-card">
+      <h4>⏳ Contrôle du Chronomètre</h4>
+      <form action="{{ url_for('start_countdown') }}" method="POST">
+        <div class="input-group">
+          <input
+            type="number"
+            name="seconds"
+            class="form-control form-control-sm"
+            placeholder="Secondes"
+            value="30"
+          />
+          <button type="submit" class="btn btn-primary btn-sm">Démarrer</button>
+        </div>
+      </form>
+      <form action="{{ url_for('stop_countdown') }}" method="POST" class="mt-2">
+        <button type="submit" class="btn btn-danger btn-sm w-100">
+          Arrêter
+        </button>
+      </form>
+    </div>
+
+    <!-- 🔹 Réinitialiser le jeu (placé en bas du Chronomètre) -->
+    <div class="game-card mt-3">
+      <h4>🔄 Réinitialiser</h4>
+      <form action="{{ url_for('reset_game') }}" method="POST">
+        <button type="submit" class="btn btn-danger btn-sm w-100">
+          <i class="bi bi-arrow-counterclockwise"></i> Réinitialiser le jeu
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 🔹 Roulette et Dé -->
+  <div class="col-lg-4 col-md-6">
+    <div class="game-card">
+      <h4>🎡 Thème & Dé</h4>
+      <form action="{{ url_for('spin_roulette') }}" method="POST">
+        <button type="submit" class="btn btn-info btn-sm w-100">
+          <i class="bi bi-arrow-clockwise"></i> Lancer la roulette
+        </button>
+      </form>
+      <form action="{{ url_for('roll_dice') }}" method="POST" class="mt-2">
+        <button type="submit" class="btn btn-secondary btn-sm w-100">
+          <i class="bi bi-dice-1"></i> Lancer un dé
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 🔹 Chat en Direct pour l'Admin -->
+  <div class="col-lg-4 col-md-12">
+    <div class="game-card">
+      <h4>💬 Chat en Direct</h4>
+      <div
+        id="chatMessages"
+        style="
+          height: 150px;
+          overflow-y: auto;
+          border: 1px solid #333;
+          padding: 5px;
+          background: #1a1a2e;
+          font-size: 0.9em;
+        "
+      ></div>
+      <form id="chatForm">
+        <div class="input-group">
+          <input
+            type="text"
+            id="chatInput"
+            class="form-control form-control-sm"
+            placeholder="Envoyer un message..."
+          />
+          <button type="submit" class="btn btn-primary btn-sm">Envoyer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endif %} {% endblock %}

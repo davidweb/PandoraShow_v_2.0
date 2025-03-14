@@ -1,0 +1,177 @@
+{% extends "layout.html" %} {% block content %}
+<!-- Desktop Layout -->
+<div class="d-none d-md-block">
+  <!-- En-tête compacte avec score individuel -->
+  <div class="row">
+    <div class="col-12">
+      <div class="game-card text-center header-card">
+        <h2 class="mb-1 header-title">🎮 Pandora Show</h2>
+        <p class="lead header-subtitle">Testez vos connaissances en direct !</p>
+        <p class="small-title">
+          Bienvenue, {{ user.username }} – Votre score : {{ user.score }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <!-- Grille principale en mode moniteur -->
+  <div class="row mt-4">
+    <!-- Colonne de gauche : Thème, Chrono et Dé -->
+    <div class="col-lg-3 col-md-4 order-1 order-lg-1">
+      <div class="game-card">
+        <h4 class="small-title">🎭 Thème</h4>
+        <div class="theme-display" id="currentTheme">Aucun</div>
+      </div>
+      <div class="game-card mt-2">
+        <h4 class="small-title">⏳ Chrono</h4>
+        <div class="countdown-container">
+          <div class="countdown-circle">
+            <svg viewBox="0 0 100 100">
+              <circle r="45" cx="50" cy="50"></circle>
+            </svg>
+            <span class="countdown-number" id="countdownDisplay">--</span>
+          </div>
+        </div>
+        <div id="countdownFinished" style="display: none">Temps écoulé !</div>
+      </div>
+      <div class="game-card mt-2">
+        <div class="dice-container text-center">
+          <div class="dice" id="diceValue">-</div>
+          <p id="diceLabel" class="small-title">Dé</p>
+        </div>
+      </div>
+    </div>
+    <!-- Colonne centrale : Quiz et Chat -->
+    <div class="col-lg-6 col-md-8 d-flex flex-column order-2 order-lg-2">
+      <div class="game-card order-1">
+        <h3 class="small-title">📝 Quiz</h3>
+        <div id="quizQuestionContainer">
+          <div class="quiz-question" id="quizQuestionDisplay">
+            En attente de la question...
+          </div>
+        </div>
+        <div id="quizAnswerContainer" style="display: none">
+          <div class="quiz-answer" id="quizAnswerDisplay"></div>
+        </div>
+      </div>
+      <div class="game-card mt-2 order-4">
+        <h3 class="small-title text-center">💬 Chat</h3>
+        <div
+          id="chatMessages"
+          style="
+            height: 150px;
+            overflow-y: auto;
+            border: 1px solid #333;
+            padding: 5px;
+            background: #1a1a2e;
+            font-size: 0.9em;
+          "
+        ></div>
+        <form id="chatForm">
+          <div class="input-group">
+            <input
+              type="text"
+              id="chatInput"
+              class="form-control form-control-sm"
+              placeholder="Votre message"
+            />
+            <button type="submit" class="btn btn-primary btn-sm">
+              Envoyer
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Colonne de droite : Scores et Joueurs connectés -->
+    <div class="col-lg-3 col-md-12 d-flex flex-column order-3 order-lg-3">
+      <div class="game-card order-1">
+        <h3 class="small-title text-center">🏆 Scores</h3>
+        <div id="scoresContainer" class="d-flex justify-content-around">
+          <div class="score-box team1">
+            <span class="score-value" id="scoreTeam1">0</span>
+          </div>
+          <div class="score-box team2">
+            <span class="score-value" id="scoreTeam2">0</span>
+          </div>
+        </div>
+      </div>
+      <div class="game-card mt-2 order-2">
+        <h3 class="small-title text-center">🧑‍🤝‍🧑 Joueurs</h3>
+        <div id="playersList">
+          <!-- Liste dynamique -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Layout -->
+<div class="d-block d-md-none">
+  <div class="mobile-header text-center">
+    <h2 class="header-title">🎮 Pandora Show</h2>
+    <p class="header-subtitle">Testez vos connaissances en direct !</p>
+    <p class="small-title">
+      Bienvenue, {{ user.username }} – Score : {{ user.score }}
+    </p>
+  </div>
+  <div class="mobile-container">
+    <div class="row mobile-top">
+      <div class="col-6">
+        <div class="game-card mobile-countdown">
+          <h4>⏳ Chrono</h4>
+          <div class="countdown-container">
+            <div class="countdown-circle">
+              <svg viewBox="0 0 100 100">
+                <circle r="45" cx="50" cy="50"></circle>
+              </svg>
+              <span class="countdown-number" id="countdownDisplay">--</span>
+            </div>
+          </div>
+          <div id="countdownFinished" style="display: none">Temps écoulé !</div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="game-card mobile-dice text-center">
+          <h4>Dé</h4>
+          <div class="dice" id="diceValue">-</div>
+        </div>
+      </div>
+    </div>
+    <div class="game-card mobile-quiz mt-2">
+      <h4>📝 Quiz</h4>
+      <div id="quizQuestionContainer">
+        <div class="quiz-question" id="quizQuestionDisplay">
+          En attente de la question...
+        </div>
+      </div>
+      <div id="quizAnswerContainer" style="display: none">
+        <div class="quiz-answer" id="quizAnswerDisplay"></div>
+      </div>
+    </div>
+    <div class="game-card mobile-chat mt-2">
+      <h4>💬 Chat</h4>
+      <div
+        id="chatMessages"
+        style="
+          height: 150px;
+          overflow-y: auto;
+          border: 1px solid #333;
+          padding: 5px;
+          background: #1a1a2e;
+          font-size: 0.9em;
+        "
+      ></div>
+      <form id="chatForm">
+        <div class="input-group">
+          <input
+            type="text"
+            id="chatInput"
+            class="form-control form-control-sm"
+            placeholder="Votre message"
+          />
+          <button type="submit" class="btn btn-primary btn-sm">Envoyer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
